@@ -92,6 +92,21 @@ function App() {
     setErrors(errorMessages);
     setCurrentFile('');
     setConverting(false);
+
+    const successCount = convertedResults.filter((r) => r.success).length;
+    const notify = () => {
+      new Notification('HEIC Converter', {
+        body: `Done! ${successCount} of ${convertedResults.length} file${convertedResults.length !== 1 ? 's' : ''} converted.`,
+      });
+    };
+
+    if (Notification.permission === 'granted') {
+      notify();
+    } else if (Notification.permission !== 'denied') {
+      Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') notify();
+      });
+    }
   };
 
   const handleDownload = async () => {
