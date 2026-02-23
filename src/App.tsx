@@ -206,9 +206,11 @@ function App() {
         )}
       </div>
 
-      {files.length > 0 && (
-        <div className="file-list">
-          <h3>Files ({files.length})</h3>
+      <div className="file-list">
+        <h3>Files ({files.length})</h3>
+        {files.length === 0 ? (
+          <p className="file-list-empty">No files added yet. Drop HEIC files above to get started.</p>
+        ) : (
           <ul>
             {files.map((file, index) => (
               <li key={index}>
@@ -217,47 +219,51 @@ function App() {
               </li>
             ))}
           </ul>
-        </div>
-      )}
+        )}
+      </div>
 
-      {files.length > 0 && !converting && results.length === 0 && (
-        <button className="convert-btn" onClick={handleConvert}>
-          Convert {files.length} file{files.length > 1 ? 's' : ''}
-        </button>
-      )}
+      <button
+        className={`convert-btn${files.length === 0 || converting || results.length > 0 ? ' disabled' : ''}`}
+        onClick={handleConvert}
+        disabled={files.length === 0 || converting || results.length > 0}
+      >
+        {converting ? `Converting... ${progress}%` : `Convert ${files.length} file${files.length !== 1 ? 's' : ''}`}
+      </button>
 
       {converting && (
         <div className="progress">
           <div className="progress-bar">
             <div className="progress-fill" style={{ width: `${progress}%` }} />
           </div>
-          <p>
-            Converting {currentFile}... {progress}%
-          </p>
+          <p>Converting {currentFile}...</p>
         </div>
       )}
 
-      {results.length > 0 && (
-        <div className="results">
-          <h3>
-            Conversion Complete: {successCount} of {results.length} succeeded
-          </h3>
-          {errors.length > 0 && (
-            <div className="errors">
-              <h4>Errors:</h4>
-              <ul>
-                {errors.map((error, i) => (
-                  <li key={i}>{error}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {successCount > 0 && (
-            <button className="download-btn" onClick={handleDownload}>
-              Download ZIP ({successCount} file{successCount > 1 ? 's' : ''})
-            </button>
-          )}
+      {results.length > 0 && errors.length > 0 && (
+        <div className="errors">
+          <h4>Errors:</h4>
+          <ul>
+            {errors.map((error, i) => (
+              <li key={i}>{error}</li>
+            ))}
+          </ul>
         </div>
+      )}
+
+      <button
+        className={`download-btn${results.length === 0 || successCount === 0 ? ' disabled' : ''}`}
+        onClick={handleDownload}
+        disabled={results.length === 0 || successCount === 0}
+      >
+        {results.length > 0
+          ? `Download ZIP (${successCount} file${successCount !== 1 ? 's' : ''})`
+          : 'Download ZIP'}
+      </button>
+
+      {results.length > 0 && (
+        <p className="results-summary">
+          Conversion complete: {successCount} of {results.length} succeeded.
+        </p>
       )}
 
       <footer className="footer">

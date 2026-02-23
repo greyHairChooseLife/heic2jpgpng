@@ -131,6 +131,13 @@
   color: #888;
 }
 
+.file-list-empty {
+  padding: 1rem 0.5rem;
+  font-size: 0.9rem;
+  color: #aaa;
+  font-style: italic;
+}
+
 .convert-btn,
 .download-btn {
   width: 100%;
@@ -140,6 +147,7 @@
   border: none;
   border-radius: 8px;
   margin-top: 1rem;
+  transition: background 0.2s, opacity 0.2s;
 }
 
 .convert-btn {
@@ -147,7 +155,7 @@
   color: white;
 }
 
-.convert-btn:hover {
+.convert-btn:hover:not(.disabled) {
   background: #0056b3;
 }
 
@@ -156,8 +164,23 @@
   color: white;
 }
 
-.download-btn:hover {
+.download-btn:hover:not(.disabled) {
   background: #1e7e34;
+}
+
+.convert-btn.disabled,
+.download-btn.disabled {
+  background: #ccc;
+  color: #888;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.results-summary {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
 }
 
 .progress {
@@ -182,18 +205,6 @@
   font-size: 0.9rem;
   color: #666;
   text-align: center;
-}
-
-.results {
-  margin-top: 1.5rem;
-  padding: 1rem;
-  background: #f9f9f9;
-  border-radius: 8px;
-}
-
-.results h3 {
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
 }
 
 .errors {
