@@ -168,10 +168,10 @@ function App() {
         </div>
 
         <div className="setting-group">
-          <label>Max Width (optional):</label>
+          <label>Max Width <span className="label-hint">(px, e.g. 1920)</span></label>
           <input
             type="number"
-            placeholder="Original size"
+            placeholder="Leave empty to keep original"
             value={settings.maxWidth ?? ''}
             onChange={(e) =>
               setSettings({
@@ -183,10 +183,10 @@ function App() {
         </div>
 
         <div className="setting-group">
-          <label>Max Height (optional):</label>
+          <label>Max Height <span className="label-hint">(px, e.g. 1080)</span></label>
           <input
             type="number"
-            placeholder="Original size"
+            placeholder="Leave empty to keep original"
             value={settings.maxHeight ?? ''}
             onChange={(e) =>
               setSettings({
@@ -195,6 +195,7 @@ function App() {
               })
             }
           />
+          <p className="setting-hint">Aspect ratio is preserved. Both set = fit within bounds.</p>
         </div>
       </div>
 
