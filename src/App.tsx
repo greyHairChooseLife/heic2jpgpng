@@ -16,6 +16,7 @@ function App() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [settings, setSettings] = useState<SavedSettings>(() => loadSettings());
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   useEffect(() => {
     saveSettings(settings);
@@ -122,81 +123,87 @@ function App() {
       </div>
 
       <div className="settings-panel">
-        <h3>Settings</h3>
+        <button className="settings-toggle" onClick={() => setSettingsOpen((v) => !v)}>
+          Settings {settingsOpen ? '▲' : '▼'}
+        </button>
 
-        <div className="setting-group">
-          <label>Format:</label>
-          <div className="radio-group">
-            <label>
+        {settingsOpen && (
+          <div className="settings-body">
+            <div className="setting-group">
+              <label>Format:</label>
+              <div className="radio-group">
+                <label>
+                  <input
+                    type="radio"
+                    name="format"
+                    value="jpg"
+                    checked={settings.format === 'jpg'}
+                    onChange={(e) =>
+                      setSettings({ ...settings, format: e.target.value as 'jpg' | 'png' })
+                    }
+                  />
+                  JPG
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="format"
+                    value="png"
+                    checked={settings.format === 'png'}
+                    onChange={(e) =>
+                      setSettings({ ...settings, format: e.target.value as 'jpg' | 'png' })
+                    }
+                  />
+                  PNG
+                </label>
+              </div>
+            </div>
+
+            <div className="setting-group">
+              <label>Quality: {settings.quality}%</label>
               <input
-                type="radio"
-                name="format"
-                value="jpg"
-                checked={settings.format === 'jpg'}
+                type="range"
+                min="70"
+                max="100"
+                value={settings.quality}
                 onChange={(e) =>
-                  setSettings({ ...settings, format: e.target.value as 'jpg' | 'png' })
+                  setSettings({ ...settings, quality: parseInt(e.target.value) })
                 }
               />
-              JPG
-            </label>
-            <label>
+            </div>
+
+            <div className="setting-group">
+              <label>Max Width <span className="label-hint">(px, e.g. 1920)</span></label>
               <input
-                type="radio"
-                name="format"
-                value="png"
-                checked={settings.format === 'png'}
+                type="number"
+                placeholder="Leave empty to keep original"
+                value={settings.maxWidth ?? ''}
                 onChange={(e) =>
-                  setSettings({ ...settings, format: e.target.value as 'jpg' | 'png' })
+                  setSettings({
+                    ...settings,
+                    maxWidth: e.target.value ? parseInt(e.target.value) : null,
+                  })
                 }
               />
-              PNG
-            </label>
+            </div>
+
+            <div className="setting-group">
+              <label>Max Height <span className="label-hint">(px, e.g. 1080)</span></label>
+              <input
+                type="number"
+                placeholder="Leave empty to keep original"
+                value={settings.maxHeight ?? ''}
+                onChange={(e) =>
+                  setSettings({
+                    ...settings,
+                    maxHeight: e.target.value ? parseInt(e.target.value) : null,
+                  })
+                }
+              />
+              <p className="setting-hint">Aspect ratio is preserved. Both set = fit within bounds.</p>
+            </div>
           </div>
-        </div>
-
-        <div className="setting-group">
-          <label>Quality: {settings.quality}%</label>
-          <input
-            type="range"
-            min="70"
-            max="100"
-            value={settings.quality}
-            onChange={(e) =>
-              setSettings({ ...settings, quality: parseInt(e.target.value) })
-            }
-          />
-        </div>
-
-        <div className="setting-group">
-          <label>Max Width <span className="label-hint">(px, e.g. 1920)</span></label>
-          <input
-            type="number"
-            placeholder="Leave empty to keep original"
-            value={settings.maxWidth ?? ''}
-            onChange={(e) =>
-              setSettings({
-                ...settings,
-                maxWidth: e.target.value ? parseInt(e.target.value) : null,
-              })
-            }
-          />
-        </div>
-
-        <div className="setting-group">
-          <label>Max Height <span className="label-hint">(px, e.g. 1080)</span></label>
-          <input
-            type="number"
-            placeholder="Leave empty to keep original"
-            value={settings.maxHeight ?? ''}
-            onChange={(e) =>
-              setSettings({
-                ...settings,
-                maxHeight: e.target.value ? parseInt(e.target.value) : null,
-              })
-            }
-          />
-          <p className="setting-hint">Aspect ratio is preserved. Both set = fit within bounds.</p>
-        </div>
+        )}
       </div>
 
       {files.length > 0 && (
