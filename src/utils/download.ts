@@ -16,7 +16,7 @@ const formatTimestamp = (): string => {
 const getConvertedFilename = (originalName: string, format: string): string => {
   const nameWithoutExt = originalName.replace(/\.[^/.]+$/, '');
   const ext = format === 'image/jpeg' ? 'jpg' : 'png';
-  return `converted_${nameWithoutExt}.${ext}`;
+  return `${nameWithoutExt}.${ext}`;
 };
 
 export const downloadAsZip = async (
